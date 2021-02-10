@@ -1,0 +1,23 @@
+
+.countersPackage{
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
+}
+
+.instructionPackage{
+    text-align:center;
+}
+
+.betBtnPackage{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.chipsPackage{
+    width:70%;
+    display:flex;
+    flex-direction:row;
+    justify-content: space-around;
+}

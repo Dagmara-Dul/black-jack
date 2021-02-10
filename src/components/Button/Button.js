@@ -4,7 +4,7 @@ import styles from './Button.module.scss';
 
 const Button = ({ children, href, secondary, ...props})=>{
 
-    const buttonClass = secondary ? styles.secondary :styles.button;
+    const buttonClass = secondary ? styles.secondary : styles.button;
 
     return(
         <>
@@ -12,7 +12,7 @@ const Button = ({ children, href, secondary, ...props})=>{
                 href ? (
                     <a
                     href={href}
-                    target="blank"
+                    // target="blank"
                     className={buttonClass}
                     rel="noopener noreferrer"
                     >
@@ -28,9 +28,9 @@ const Button = ({ children, href, secondary, ...props})=>{
     )
 };
 
-Button.PropTypes = {
-    href: PropTypes.string,
-    secondary: PropTypes.bool,
-}
+// Button.PropTypes = {
+//     href: PropTypes.string,
+//     secondary: PropTypes.bool,
+// }
 
 export default Button;

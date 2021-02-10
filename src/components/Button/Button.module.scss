@@ -16,10 +16,16 @@
     @extend .button;
   
     width:120px;
-    background-color:#000000;
-    // border: 2px solid #1e58ff;
+    background-color: #000000;
+    border: 2px solid #1e58ff;
     color: #ffffff;
     font-weight: 700;
     font-size: .8em;
     box-shadow: 0 5px 20px -5px rgba(#818181, .9)
+  }
+
+  .button:hover{
+      color:#ffffff;
+      background-color:#000000;
+      border-color:#000000;
   }

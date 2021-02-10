@@ -1,9 +1,19 @@
 import React from "react";
-import Start from '../Start/Start'
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Start from '../Start/Start';
+import Bet from '../Bet/Bet';
 
 class Root extends React.Component {
     render(){return(
-        <Start></Start>
+        <BrowserRouter>
+            <>
+            <Switch>
+                <Route exact path='/'component={Start} />
+                <Route path='/bet'component={Bet} />
+            </Switch>
+            </>
+        </BrowserRouter>
+        
     )
         
     }
