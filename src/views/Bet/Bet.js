@@ -6,33 +6,44 @@ import styles from './Bet.module.scss';
 
 
 class Bet extends React.Component {
-   addToBet =()=>{
+
+    state={
+        bank: 1000,
+        bet: 0,
+        dealBtn: false
+    }
+
+    
+
+   addToBet =(value)=>{
         console.log('klik')
-        var betSumCounter = document.getElementById('#sumCounter')
-        console.log(betSumCounter)
+        this.setState((prevState) => ({bet: prevState.bet + value,dealBtn:true}))
+        this.setState((prevState) => ({bank: prevState.bank - value}))
+        if(this.state.bet ==! 0) {this.setState({dealBtn:true})}
+        console.log(this.state)
     }
     render(){
-        
+        const btnClass = this.state.dealBtn ? styles.visible : styles.invisible;
         return(
             <div className={styles.betPackage}>
                 <div className={styles.countersPackage}>
-                    <div className={styles.bankCounterPackage}>Bank</div>
-                    <div className={styles.betCounterPackage}>Bet</div>
+                    <div className={styles.bankCounterPackage}>Bank: ${this.state.bank}</div>
+                    <div className={styles.betCounterPackage}>Bet: ${this.state.bet}</div>
                 </div>
                 <div className={styles.instructionPackage}>
-                    <h1>Instructions</h1>
-                    <p>here comes intructions</p>
+                    <h1>Please place a bet</h1>
+                    {/* <p>Please place a bet</p> */}
                 </div>
                 <div className={styles.betBtnPackage}>
-                    <Button>Play</Button>
+                    <Button className={btnClass}>Deal</Button>
                     <div className={styles.sumPackage} id="sumCounter">
-                        sum comes here
+                        ${this.state.bet}
                     </div>
                     <div className={styles.chipsPackage}>
-                        <Chip onClick={this.addToBet}>$5</Chip>
-                        <Chip>$10</Chip>
-                        <Chip>$25</Chip>
-                        <Chip>$100</Chip>
+                        <Chip onClick={() => this.addToBet(5)}>$5</Chip>
+                        <Chip onClick={() => this.addToBet(10)}>$10</Chip>
+                        <Chip onClick={() => this.addToBet(25)}>$25</Chip>
+                        <Chip onClick={() => this.addToBet(100)}>$100</Chip>
                     </div>
                 </div>
             </div>

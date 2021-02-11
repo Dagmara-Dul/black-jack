@@ -3,16 +3,20 @@
     display:flex;
     flex-direction:row;
     justify-content: space-between;
+    margin-bottom: 50px;
+    padding:30px;
 }
 
 .instructionPackage{
     text-align:center;
+    margin-bottom: 50px;
 }
 
 .betBtnPackage{
     display:flex;
     flex-direction:column;
     align-items:center;
+    
 }
 
 .chipsPackage{
@@ -20,4 +24,35 @@
     display:flex;
     flex-direction:row;
     justify-content: space-around;
+    margin-top: 50px;
 }
+
+.sumPackage {
+    margin: 50px;
+}
+
+.visible{
+    display:block;
+    max-width:120px;
+    text-align: center;
+    font-size: 10px;
+    text-decoration: none;
+    padding: 7px 12px;
+    font-weight: 500;
+    background: none;
+    border: 2px solid #000000;
+    color: #000000;
+    cursor: pointer;
+}
+
+.visible:hover{
+    color:#ffffff;
+    background-color:#000000;
+    border-color:#000000;
+    font-weight: bold;
+}
+
+.invisible {
+    display:none;
+}
+
