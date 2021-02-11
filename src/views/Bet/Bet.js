@@ -1,5 +1,5 @@
 import React from 'react';
-// import Button from '../../components/Button/Button';
+import { Link } from 'react-router-dom';
 import Button from '../../components/Button/Button';
 import Chip from '../../components/Chip/Chip';
 import styles from './Bet.module.scss';
@@ -16,12 +16,20 @@ class Bet extends React.Component {
     
 
    addToBet =(value)=>{
-        console.log('klik')
+    
         this.setState((prevState) => ({bet: prevState.bet + value,dealBtn:true}))
         this.setState((prevState) => ({bank: prevState.bank - value}))
         if(this.state.bet ==! 0) {this.setState({dealBtn:true})}
-        console.log(this.state)
+        
     }
+
+    goToGame = () =>{
+        console.log('przejdz')
+        var bankValue = this.state.bank;
+        var betValue = this.state.bet;
+        console.log("bank: " + bankValue + " bet: " +betValue)
+    }
+
     render(){
         const btnClass = this.state.dealBtn ? styles.visible : styles.invisible;
         return(
@@ -32,10 +40,9 @@ class Bet extends React.Component {
                 </div>
                 <div className={styles.instructionPackage}>
                     <h1>Please place a bet</h1>
-                    {/* <p>Please place a bet</p> */}
                 </div>
                 <div className={styles.betBtnPackage}>
-                    <Button className={btnClass}>Deal</Button>
+                    <Button className={btnClass} onClick={() => this.goToGame()}><Link className={styles.linkStyle} to="/game">Deal</Link></Button>
                     <div className={styles.sumPackage} id="sumCounter">
                         ${this.state.bet}
                     </div>
