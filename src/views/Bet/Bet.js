@@ -24,7 +24,7 @@ class Bet extends React.Component {
     }
 
     goToGame = () =>{
-        console.log('przejdz')
+        
         var bankValue = this.state.bank;
         var betValue = this.state.bet;
         console.log("bank: " + bankValue + " bet: " +betValue)

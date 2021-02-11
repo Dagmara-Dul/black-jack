@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from "prop-types";
 import styles from './Chip.module.scss';
 
-const Chip = ({ children, secondary, ...props})=>{
+const Chip = ({ children, ...props})=>{
 
     return(
         <>

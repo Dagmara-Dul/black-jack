@@ -4,7 +4,6 @@ import styles from './Button.module.scss';
 
 const Button = ({ children, href, secondary, ...props})=>{
 
-    // const buttonClass = secondary ? styles.secondary : styles.button;
 
     return(
         <>
@@ -12,7 +11,6 @@ const Button = ({ children, href, secondary, ...props})=>{
                 href ? (
                     <a
                     href={href}
-                    // target="blank"
                     className={styles.button}
                     rel="noopener noreferrer"
                     >
