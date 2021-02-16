@@ -1,5 +1,7 @@
 import React from 'react';
 import styles from './Game.module.scss';
+import PlayerCards from '../../components/PlayerCards/PlayerCards';
+import Chip from '../../components/Chip/Chip';
 
 class Game extends React.Component{
     constructor (props){
@@ -7,16 +9,22 @@ class Game extends React.Component{
         this.state = {
             round: 0,
             deckKey: "",
-            userCards : [],
+            playerCards : [],
             casinoCards: []
             
         }
     }
     
+    createActionButtons = () =>{
+        console.log('daga')
+        document.getElementById('actionBtnPackage').style.display="block"
+    }
+
+    vanishButton = (id) => {
+        document.getElementById(id).style.display='none';
+    }
 
     shuffleCards = () =>{
-        
-        let deckKey = this.state.deckKey;
         
         fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6') //tasowanie kart
         .then(newDeck => {
@@ -24,10 +32,9 @@ class Game extends React.Component{
         })
         .then(data => {
             this.setState({deckKey:data.deck_id})
-            console.log(data.deck_id)
             return this.state.deckKey
         })
-        .then(deck => {
+        .then(() => {
             console.log(this.state.deckKey)
             return fetch(`https://deckofcardsapi.com/api/deck/${this.state.deckKey}/draw/?count=2`) //pobieranie 2-ch pierwszych kart
         })
@@ -36,47 +43,23 @@ class Game extends React.Component{
         })
         .then (data1 =>{
             console.log(data1)
-            return this.setState({userCards: data1.cards.map(function(e){return e.image})})
-        }).then(singleCard =>{
-            console.log(singleCard)
-            console.log(this.state.userCards)
-            let userCardsInFirstRound = "'" + this.state.userCards[0] + "'";
-            console.log(userCardsInFirstRound)
-            const userCardsPackage = document.getElementById('userCardsPackage');
+            return this.setState({playerCards: data1.cards.map(function(e){return e.image})})
+        }).then(() =>{
+            
+            console.log(this.state.playerCards)
+            
+            const playerCardsPackage = document.getElementById('playerCardsPackage');
 
-            this.state.userCards.map(function(car){
+            this.state.playerCards.map(function(car){
                 
-                userCardsPackage.insertAdjacentHTML('beforeend', `<div class=${styles.cards}> <img src='${car}' /></div>`);
+                playerCardsPackage.insertAdjacentHTML('beforeend', `<div class=${styles.cards}> <img class=${styles.cardImage} src='${car}' /></div>`);
+                // playerCardsPackage.insertAdjacentHTML('beforeend', ` <div class='cards' style="background-image: url('${car}')"> </div> `);
                 
             })
-            
-            // this.state.userCards.map(function(card){
-                
-            //     userCardsPackage.appendChild(document.createElement("div").innerHTML=`<img src='${card}' />`)
-            //     console.log(card)
-            // })
-
-            // var singleCTBox = document.createElement("div")
-            // singleCTBox.innerHTML = `<img src=${userCardsInFirstRound} />`
-            
-                // test.innerHTML=`<img src=${userCardsInFirstRound} />`
-            
-            // userCardsPackage.appendChild(singleCTBox)
-            
-            
-                // <div className="CardsImages">
-                    {/* ${this.state.userCards.map(function(image){
-                        return `<img src=${image} className="singleCardImage"/> `
-                    })} */}
-                    
-                // </div>
-                
-                // userCardsInFirstRound.map(function(element){
-                //     userCardPackage.appendChild(element)
-                // })
         })
-        
         .catch(err => console.log(err))
+        this.vanishButton('initiateGame');
+        this.createActionButtons(); 
     };
 
    
@@ -86,13 +69,15 @@ class Game extends React.Component{
         return(
             <>
             <h1>widok gry</h1>
-            <button onClick={() => this.shuffleCards()}>sprawdz karty</button>
-            <div className={styles.croupierCardsPackage}>karty krupiera</div>
-            <div className={styles.userCardsPackage} id="userCardsPackage">karty gracza
-                <div id="first"></div>
-                <div id="second"></div>
-                <div id="third"></div>
-                <div id="fourth"></div>
+            <button id='initiateGame' onClick={() => this.shuffleCards()}>sprawdz karty</button>
+            <div className={styles.croupierCardsPackage}>
+                <h2>karty krupiera</h2>
+            </div>
+            <PlayerCards></PlayerCards>
+            <div className={styles.actionBtnPackage} id="actionBtnPackage">
+                <Chip>Double</Chip>
+                <Chip>Hit</Chip>
+                <Chip>Stand</Chip>
             </div>
             </>
         )

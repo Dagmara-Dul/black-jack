@@ -47,10 +47,10 @@ class Bet extends React.Component {
                         ${this.state.bet}
                     </div>
                     <div className={styles.chipsPackage}>
-                        <Chip onClick={() => this.addToBet(5)}>$5</Chip>
-                        <Chip onClick={() => this.addToBet(10)}>$10</Chip>
-                        <Chip onClick={() => this.addToBet(25)}>$25</Chip>
-                        <Chip onClick={() => this.addToBet(100)}>$100</Chip>
+                        <Chip chip onClick={() => this.addToBet(5)}>$5</Chip>
+                        <Chip chip onClick={() => this.addToBet(10)}>$10</Chip>
+                        <Chip chip onClick={() => this.addToBet(25)}>$25</Chip>
+                        <Chip chip onClick={() => this.addToBet(100)}>$100</Chip>
                     </div>
                 </div>
             </div>
