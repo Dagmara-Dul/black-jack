@@ -37,12 +37,13 @@
     text-align: center;
     font-size: 10px;
     text-decoration: none;
-    padding: 17px 37px;
+    padding: 17px 0px;
     font-weight: 500;
     background: none;
     border: 1px solid #000000;
     color: #000000;
     cursor: pointer;
+    z-index:5;
 }
 
 .visible:hover{
@@ -63,4 +64,5 @@
 .linkStyle{
     color:#000;
     text-decoration: none;
+    padding: 17px 37px;
 }
