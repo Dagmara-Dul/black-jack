@@ -8,8 +8,8 @@ const chipClass = chip ? styles.chip : styles.actionBtnClass
 
     return(
         <div className={styles.playerPackage}>
-                <h2>karty gracza</h2>
                 <div className={styles.playerCardsPackage} id="playerCardsPackage"></div>
+                <h2 className={styles.h2}>player</h2>
         </div>
     )
 };
