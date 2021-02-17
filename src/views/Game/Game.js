@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './Game.module.scss';
 import PlayerCards from '../../components/PlayerCards/PlayerCards';
 import Chip from '../../components/Chip/Chip';
+import cardBack from '../../media/cardBack.png'
 
 class Game extends React.Component{
 
@@ -11,52 +12,66 @@ class Game extends React.Component{
             round: 0,
             deckKey: "",
             playerCards : [],
-            casinoCards: []
-            
+            casinoCards: [],
+            playerRoundScore: 0,
+            casinoRoundScore: 0,
         }
+    }
+
+    saveRoundScore = () =>{
+
+    }
+    
+    showHiddenCard = (placeId)=>{
+        let cardPackage = document.getElementById(placeId)
+        cardPackage.insertAdjacentHTML('beforeend', `<div class=${styles.cards}> <img class=${styles.cardBack} src=${cardBack} /></div>`)
     }
 
     showCards = (placeId,whoseCard) =>{
         let cardPackage = document.getElementById(placeId);
-        whoseCard.map(function(car){
-                
-            cardPackage.insertAdjacentHTML('beforeend', `<div class=${styles.cards}> <img class=${styles.cardImage} src='${car}' /></div>`);
+        whoseCard.map(function(card){
+            cardPackage.insertAdjacentHTML('beforeend', `<div class=${styles.cards}> <img class=${styles.cardImage} src='${card}' /></div>`);
             // playerCardsPackage.insertAdjacentHTML('beforeend', ` <div class='cards' style="background-image: url('${car}')"> </div> `);
         })
     }
     
     createActionButtons = () =>{
-        console.log('daga')
         document.getElementById('actionBtnPackage').style.display="block"
     }
+
 
     removeButton = (id) => {
         document.getElementById(id).style.display='none';
     }
 
+
     dealCards = (howMany, toWhom) =>{
         if(this.state.deckKey !== ""){
-            console.log('jest klucz')
-            console.log(this.state.deckKey)
+            
             return fetch(`https://deckofcardsapi.com/api/deck/${this.state.deckKey}/draw/?count=${howMany}`)
             .then(data =>{
                 return data.json()
             }) 
-            .then(data1 =>{
-                console.log(data1)
-                return this.setState({ [`${toWhom}`]: data1.cards.map(function(e){return e.image})})
+            .then(cardDetails =>{
+                console.log(cardDetails)
+                return this.setState({ 
+                    [`${toWhom}Cards`]: cardDetails.cards.map(function(e){return e.image}),
+                    [`${toWhom}RoundScore`]: cardDetails.cards.map(function(e){return e.value})
+                })
             })
             .then(()=>{
                 console.log(this.state.casinoCards)
+                console.log(this.state.casinoRoundScore)
                 this.showCards('casinoCardsPackage',this.state.casinoCards)
+                this.showHiddenCard('casinoCardsPackage');
             })
             
         }else{
-            console.log("can't deal cards, there is no deckId")
+            console.log("can't deal cards, there is no deck chosen")
         }
     }
 
-    shuffleCards = () =>{
+    startGame = () =>{
         
         fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6') //tasowanie kart
         .then(newDeck => {
@@ -89,11 +104,12 @@ class Game extends React.Component{
                 
             })
         }).then(()=>{
-            const casinoCards = 'casinoCards'
+            const casinoCards = 'casino'
             this.dealCards(1,casinoCards)})
         .catch(err => console.log(err))
         this.removeButton('initiateGame');
         this.createActionButtons(); 
+        
     };
 
    
@@ -103,9 +119,12 @@ class Game extends React.Component{
         return(
             <>
             <h1>widok gry</h1>
-            <button id='initiateGame' onClick={() => this.shuffleCards()}>sprawdz karty</button>
-            <div className={styles.croupierCardsPackage} id="casinoCardsPackage">
-                <h2>karty krupiera</h2>
+            <button id='initiateGame' onClick={() => this.startGame()}>sprawdz karty</button>
+            <div className={styles.croupiePackage}>
+                <h2>casino</h2>
+                <div className={styles.croupierCardsPackage} id="casinoCardsPackage">
+                    <div id="casinoPointCounter"></div>
+                </div>
             </div>
             <PlayerCards></PlayerCards>
             <div className={styles.actionBtnPackage} id="actionBtnPackage">

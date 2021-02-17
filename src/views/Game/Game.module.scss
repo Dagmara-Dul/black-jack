@@ -12,3 +12,16 @@
     text-align: center;
     display:none;
 }
+
+.croupierCardsPackage{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.cardBack {
+    @extend .cardImage;
+    height:138px;
+    border: .5px solid #7f7e7e;
+    border-radius:5px;
+}
