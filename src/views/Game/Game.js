@@ -2,7 +2,8 @@ import React from 'react';
 import styles from './Game.module.scss';
 import PlayerCards from '../../components/PlayerCards/PlayerCards';
 import Chip from '../../components/Chip/Chip';
-import cardBack from '../../media/cardBack.png'
+import Counter from '../../components/Counter/Counter';
+import cardBack from '../../media/cardBack.png';
 
 class Game extends React.Component{
 
@@ -15,6 +16,32 @@ class Game extends React.Component{
             casinoCards: [],
             playerRoundScore: 0,
             casinoRoundScore: 0,
+        }
+    }
+
+    addPoints = () =>{
+        console.log("DAGA")
+        console.log(this.state.playerRoundScore)
+        const sumPoints =[];
+        if(this.state.playerRoundScore){
+            // this.state.playerRoundScore.map(function(e){
+            //     if(e==="QUEEN" || e==="JACK" || e==="KING"){
+            //         e=10 && sumPoints.push(e)
+            //         console.log("ddddddd")
+            //         console.log(sumPoints)
+            //     }else if(e==="ACE"){
+            //         e=11 && sumPoints.push(e)
+            //     }
+            // })
+
+            var cardsNames= this.state.playerRoundScore;
+            var cardsScores = cardsNames.map(function(singleCard){
+                if(singleCard==="QUEEN" || singleCard==="KING" || singleCard==="JACK" || singleCard==="ACE"){
+                    return 10
+                }else{return parseInt(singleCard,10)}
+            })
+            console.log(cardsScores.reduce((a,b)=> a+b,0))
+            return cardsScores.reduce((a,b)=> a+b,0)
         }
     }
     
@@ -63,7 +90,7 @@ class Game extends React.Component{
                 if(toWhom == 'casino'){
                     this.showHiddenCard(`${toWhom}CardsPackage`)
                 };
-            })
+            }).then(()=>this.addPoints())
             
         }else{
             console.log("can't deal cards, there is no deck chosen")
@@ -106,6 +133,7 @@ class Game extends React.Component{
                 </div>
             </div>
             <PlayerCards></PlayerCards>
+            <Counter points={this.state.playerRoundScore}>player score</Counter>
             <div className={styles.actionBtnPackage} id="actionBtnPackage">
                 <Chip>Double</Chip>
                 <Chip>Hit</Chip>
