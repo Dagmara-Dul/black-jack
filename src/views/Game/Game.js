@@ -24,15 +24,6 @@ class Game extends React.Component{
         console.log(this.state.playerRoundScore)
         const sumPoints =[];
         if(this.state.playerRoundScore){
-            // this.state.playerRoundScore.map(function(e){
-            //     if(e==="QUEEN" || e==="JACK" || e==="KING"){
-            //         e=10 && sumPoints.push(e)
-            //         console.log("ddddddd")
-            //         console.log(sumPoints)
-            //     }else if(e==="ACE"){
-            //         e=11 && sumPoints.push(e)
-            //     }
-            // })
 
             var cardsNames= this.state.playerRoundScore;
             var cardsScores = cardsNames.map(function(singleCard){
