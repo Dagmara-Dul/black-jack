@@ -17,10 +17,6 @@ class Game extends React.Component{
             casinoRoundScore: 0,
         }
     }
-
-    saveRoundScore = () =>{
-
-    }
     
     showHiddenCard = (placeId)=>{
         let cardPackage = document.getElementById(placeId)
@@ -45,7 +41,8 @@ class Game extends React.Component{
     }
 
 
-    dealCards = (howMany, toWhom) =>{
+    dealCards = (howMany,  toWhom) =>{
+        // const howMany = toWhom=="casino"?howMany=1:howMany=2
         if(this.state.deckKey !== ""){
             
             return fetch(`https://deckofcardsapi.com/api/deck/${this.state.deckKey}/draw/?count=${howMany}`)
@@ -60,10 +57,12 @@ class Game extends React.Component{
                 })
             })
             .then(()=>{
-                console.log(this.state.casinoCards)
-                console.log(this.state.casinoRoundScore)
-                this.showCards('casinoCardsPackage',this.state.casinoCards)
-                this.showHiddenCard('casinoCardsPackage');
+                console.log(this.state[`${toWhom}Cards`])
+                console.log(this.state[`${toWhom}RoundScore`])
+                this.showCards(`${toWhom}CardsPackage`,this.state[`${toWhom}Cards`] )
+                if(toWhom == 'casino'){
+                    this.showHiddenCard(`${toWhom}CardsPackage`)
+                };
             })
             
         }else{
@@ -81,38 +80,18 @@ class Game extends React.Component{
             this.setState({deckKey:data.deck_id})
             return this.state.deckKey
         })
-        .then(() => {
-            console.log(this.state.deckKey)
-            return fetch(`https://deckofcardsapi.com/api/deck/${this.state.deckKey}/draw/?count=2`) //pobieranie 2-ch pierwszych kart
+        .then(()=>{
+            const playerCards = 'player'
+            this.dealCards(2,playerCards)
         })
-        .then(firstRoundCards =>{
-            return firstRoundCards.json()
-        })
-        .then (data1 =>{
-            console.log(data1)
-            return this.setState({playerCards: data1.cards.map(function(e){return e.image})})
-        }).then(() =>{
-            
-            console.log(this.state.playerCards)
-            
-            const playerCardsPackage = document.getElementById('playerCardsPackage');
-
-            this.state.playerCards.map(function(car){
-                
-                playerCardsPackage.insertAdjacentHTML('beforeend', `<div class=${styles.cards}> <img class=${styles.cardImage} src='${car}' /></div>`);
-                // playerCardsPackage.insertAdjacentHTML('beforeend', ` <div class='cards' style="background-image: url('${car}')"> </div> `);
-                
-            })
-        }).then(()=>{
+        .then(()=>{
             const casinoCards = 'casino'
-            this.dealCards(1,casinoCards)})
+            this.dealCards(1,casinoCards)
+        })
         .catch(err => console.log(err))
         this.removeButton('initiateGame');
-        this.createActionButtons(); 
-        
+        this.createActionButtons();   
     };
-
-   
 
     render(){
         
