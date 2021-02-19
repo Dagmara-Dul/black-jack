@@ -4,8 +4,6 @@ import styles from './PlayerCards.module.scss';
 
 const PlayerCards = ({ children, chip, ...props})=>{
 
-const chipClass = chip ? styles.chip : styles.actionBtnClass
-
     return(
         <div className={styles.playerPackage}>
                 <div className={styles.playerCardsPackage} id="playerCardsPackage"></div>
