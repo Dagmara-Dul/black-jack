@@ -6,7 +6,7 @@ const Counter = ({ children, points, ...props})=>{
 
     return(     
         <div className={styles.counterClass} {...props}>
-            {children}{points}
+            {children} {points}
         </div>
     )
 };

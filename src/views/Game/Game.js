@@ -1,4 +1,5 @@
 import React from 'react';
+
 import styles from './Game.module.scss';
 import PlayerCards from '../../components/PlayerCards/PlayerCards';
 import Chip from '../../components/Chip/Chip';
@@ -14,24 +15,27 @@ class Game extends React.Component{
             deckKey: "",
             playerCards : [],
             casinoCards: [],
-            playerRoundScore: 0,
-            casinoRoundScore: 0,
+            playerRoundCardsValues: 0,
+            casinoRoundCardsValues: 0,
+            playerRoundScore:0,
+            casinoRoundScore:0,
+            bank:0,
+            bet:0
         }
     }
 
-    addPoints = () =>{
-        console.log("DAGA")
-        console.log(this.state.playerRoundScore)
-        const sumPoints =[];
-        if(this.state.playerRoundScore){
+    addPoints = (whoseScore) =>{
+        if(this.state[`${whoseScore}RoundCardsValues`]){
 
-            var cardsNames= this.state.playerRoundScore;
+            var cardsNames= this.state[`${whoseScore}RoundCardsValues`];
             var cardsScores = cardsNames.map(function(singleCard){
-                if(singleCard==="QUEEN" || singleCard==="KING" || singleCard==="JACK" || singleCard==="ACE"){
+                if(singleCard==="QUEEN" || singleCard==="KING" || singleCard==="JACK"){
                     return 10
+                }else if(singleCard==="ACE"){
+                    return 11
                 }else{return parseInt(singleCard,10)}
             })
-            console.log(cardsScores.reduce((a,b)=> a+b,0))
+            
             return cardsScores.reduce((a,b)=> a+b,0)
         }
     }
@@ -53,35 +57,48 @@ class Game extends React.Component{
         document.getElementById('actionBtnPackage').style.display="block"
     }
 
-
     removeButton = (id) => {
         document.getElementById(id).style.display='none';
     }
 
+    getBankAndBetValues = () =>{
+        let bankAndBetValues = sessionStorage.getItem('bankAndBetValues');
+        bankAndBetValues = JSON.parse(bankAndBetValues)
+        console.log(bankAndBetValues)
+        this.setState({bank:bankAndBetValues.bank, bet:bankAndBetValues.bet})
+    }
 
     dealCards = (howMany,  toWhom) =>{
         // const howMany = toWhom=="casino"?howMany=1:howMany=2
         if(this.state.deckKey !== ""){
             
-            return fetch(`https://deckofcardsapi.com/api/deck/${this.state.deckKey}/draw/?count=${howMany}`)
-            .then(data =>{
-                return data.json()
-            }) 
+            return fetch(`https://deckofcardsapi.com/api/deck/${this.state.deckKey}/draw/?count=${howMany}`,{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            })
+            .then(data => data.json()
+            ) 
             .then(cardDetails =>{
                 console.log(cardDetails)
                 return this.setState({ 
                     [`${toWhom}Cards`]: cardDetails.cards.map(function(e){return e.image}),
-                    [`${toWhom}RoundScore`]: cardDetails.cards.map(function(e){return e.value})
+                    [`${toWhom}RoundCardsValues`]: cardDetails.cards.map(function(e){return e.value})
                 })
             })
             .then(()=>{
                 console.log(this.state[`${toWhom}Cards`])
-                console.log(this.state[`${toWhom}RoundScore`])
+                console.log(this.state[`${toWhom}RoundCardsValues`])
                 this.showCards(`${toWhom}CardsPackage`,this.state[`${toWhom}Cards`] )
                 if(toWhom == 'casino'){
                     this.showHiddenCard(`${toWhom}CardsPackage`)
                 };
-            }).then(()=>this.addPoints())
+            })
+            .then(()=>{
+                this.setState({
+                    [`${toWhom}RoundScore`]:this.addPoints(toWhom)
+                })
+            })
+                
             
         }else{
             console.log("can't deal cards, there is no deck chosen")
@@ -89,7 +106,9 @@ class Game extends React.Component{
     }
 
     startGame = () =>{
-        
+    
+        this.getBankAndBetValues()
+
         fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6') //tasowanie kart
         .then(newDeck => {
             return newDeck.json()
@@ -118,18 +137,21 @@ class Game extends React.Component{
             <h1>widok gry</h1>
             <button id='initiateGame' onClick={() => this.startGame()}>sprawdz karty</button>
             <div className={styles.croupiePackage}>
+                <Counter points={this.state.casinoRoundScore}>casino score:</Counter>
                 <h2>casino</h2>
                 <div className={styles.croupierCardsPackage} id="casinoCardsPackage">
                     <div id="casinoPointCounter"></div>
                 </div>
             </div>
             <PlayerCards></PlayerCards>
-            <Counter points={this.state.playerRoundScore}>player score</Counter>
+            <Counter points={this.state.playerRoundScore}>player score:</Counter>
+
             <div className={styles.actionBtnPackage} id="actionBtnPackage">
                 <Chip>Double</Chip>
                 <Chip>Hit</Chip>
                 <Chip>Stand</Chip>
             </div>
+            
             </>
         )
     }
