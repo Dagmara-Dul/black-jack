@@ -1,8 +1,9 @@
 import React from 'react';
-
 import styles from './Game.module.scss';
 import PlayerCards from '../../components/PlayerCards/PlayerCards';
 import Chip from '../../components/Chip/Chip';
+import Button from '../../components/Button/Button'
+import Bankbet from '../../components/Bankbet/Bankbet'
 import Counter from '../../components/Counter/Counter';
 import cardBack from '../../media/cardBack.png';
 
@@ -58,14 +59,20 @@ class Game extends React.Component{
     }
 
     removeButton = (id) => {
-        document.getElementById(id).style.display='none';
+        document.getElementById(id).style.display='none';<div className={styles.countersPackage}>
+        <div className={styles.bankCounterPackage}>Bank: ${this.state.bank}</div>
+        <div className={styles.betCounterPackage}>Bet: ${this.state.bet}</div>
+    </div>
     }
 
-    getBankAndBetValues = () =>{
+    getBankAndBetValues = (counter) =>{
         let bankAndBetValues = sessionStorage.getItem('bankAndBetValues');
         bankAndBetValues = JSON.parse(bankAndBetValues)
         console.log(bankAndBetValues)
         this.setState({bank:bankAndBetValues.bank, bet:bankAndBetValues.bet})
+        if(counter==="bank"){
+            return bankAndBetValues.bank
+        }else{return bankAndBetValues.bet}   
     }
 
     dealCards = (howMany,  toWhom) =>{
@@ -104,7 +111,7 @@ class Game extends React.Component{
             console.log("can't deal cards, there is no deck chosen")
         }
     }
-
+    
     startGame = () =>{
     
         this.getBankAndBetValues()
@@ -134,8 +141,10 @@ class Game extends React.Component{
         
         return(
             <>
-            <h1>widok gry</h1>
-            <button id='initiateGame' onClick={() => this.startGame()}>sprawdz karty</button>
+            
+            <Bankbet bankValue={this.state.bank } betValue={this.state.bet}></Bankbet>
+            {/* <button id='initiateGame' onClick={() => this.startGame()}>play</button> */}
+            <Button id='initiateGame' onClick={() => this.startGame()} >start</Button>
             <div className={styles.croupiePackage}>
                 <Counter points={this.state.casinoRoundScore}>casino score:</Counter>
                 <h2>casino</h2>

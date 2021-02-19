@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import Bankbet from '../../components/Bankbet/Bankbet'
 import Button from '../../components/Button/Button';
 import Chip from '../../components/Chip/Chip';
 import styles from './Bet.module.scss';
@@ -39,10 +39,7 @@ class Bet extends React.Component {
         const btnClass = this.state.dealBtn ? styles.visible : styles.invisible;
         return(
             <div className={styles.betPackage}>
-                <div className={styles.countersPackage}>
-                    <div className={styles.bankCounterPackage}>Bank: ${this.state.bank}</div>
-                    <div className={styles.betCounterPackage}>Bet: ${this.state.bet}</div>
-                </div>
+                <Bankbet bankValue={this.state.bank} betValue={this.state.bet}></Bankbet>
                 <div className={styles.instructionPackage}>
                     <h1>Please place a bet</h1>
                 </div>
