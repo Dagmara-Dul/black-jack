@@ -134,7 +134,11 @@ class Game extends React.Component{
         .then(()=>{
             const playerCards = 'player'
             this.dealCards(2,playerCards)
+            
         })
+        .then(()=>{
+            const playerCards = 'player'
+            this.checkScoreNow(playerCards)})
         .then(()=>{
             const casinoCards = 'casino'
             this.dealCards(1,casinoCards)
@@ -166,6 +170,7 @@ class Game extends React.Component{
         try{
             const dealCardsDuringSt = await fn(nrOfCards,cardsOwner);
             console.log(dealCardsDuringSt)
+            this.checkScoreNow(cardsOwner)
             if(dealCardsDuringSt>17){
                 console.log("koniec")
             }else{console.log(this.dealCardsDuringStand(fn,nrOfCards,cardsOwner))}
@@ -184,6 +189,11 @@ class Game extends React.Component{
         // } else {
         //     this.dealCards(1,whose)
         // }
+    }
+
+    checkScoreNow = (whose)=>{
+        let score = this.state[`${whose}RoundScore`]
+        console.log(`sprawdzam ${score}`)
     }
 
 
