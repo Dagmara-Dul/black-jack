@@ -44,7 +44,10 @@ class Game extends React.Component{
     
     showHiddenCard = (placeId)=>{
         let cardPackage = document.getElementById(placeId)
-        cardPackage.insertAdjacentHTML('beforeend', `<div id='cardBack' class=${styles.cards}> <img class=${styles.cardBack} src=${cardBack} /></div>`)
+        if(cardPackage){
+            cardPackage.insertAdjacentHTML('beforeend', `<div id='cardBack' class=${styles.cards}> <img class=${styles.cardBack} src=${cardBack} /></div>`)
+        }
+        
     }
 
     showCards = (placeId,whoseCard) =>{
@@ -79,7 +82,8 @@ class Game extends React.Component{
         
         if(this.state.deckKey !== ""){
             
-            return fetch(`https://deckofcardsapi.com/api/deck/${this.state.deckKey}/draw/?count=${howMany}`,{
+            return fetch(`https://deckofcardsapi.com/api/deck/${this.state.deckKey}/draw/?count=${howMany}`
+            ,{
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             })
@@ -101,11 +105,14 @@ class Game extends React.Component{
                 this.setState((prevState)=>(
                     {
                         [`${toWhom}RoundScore`]: prevState[`${toWhom}RoundScore`] + this.addPoints(toWhom)
+                    
                     }
                 ))
+            return this.state[`${toWhom}RoundScore`]
             })
-                
             
+            // .then(()=>this.checkScore(toWhom))
+                           
         }else{
             console.log("can't deal cards, there is no deck chosen")
         }
@@ -141,20 +148,46 @@ class Game extends React.Component{
         this.setState((prevState) => ({deal: prevState.deal + 1}))
     }
 
+    getState = async (value) => {
+        console.log(value)
+    }
+
     stand = () =>{
         this.countDeals();
         console.log(this.state.deal)
         document.getElementById('cardBack').style.display="none";
-        const casinoCards = 'casino';
-        this.dealCards(1,casinoCards)
-        this.checkScore()
+        const casinoCards = 'casino'; 
+        this.getState("to jest to: " + this.state.casinoRoundScore)
+        this.dealCardsDuringStand(this.dealCards,1,casinoCards)
+    }
+    
+
+    dealCardsDuringStand = async(fn,nrOfCards,cardsOwner)=>{
+        try{
+            const dealCardsDuringSt = await fn(nrOfCards,cardsOwner);
+            console.log(dealCardsDuringSt)
+            if(dealCardsDuringSt>17){
+                console.log("koniec")
+            }else{console.log(this.dealCardsDuringStand(fn,nrOfCards,cardsOwner))}
+        }catch(err){
+            console.log(Error(err))
+        }
     }
 
     checkScore = (whose) =>{
-        if(this.state[`${whose}RoundScore`]>21){
-            window.alert(`${whose} przedobrzył, kończy grę`)
-        }
+        do{
+            this.dealCards(1,whose)
+        } while (this.state[`${whose}RoundScore`]<17)
+        // if(this.state[`${whose}RoundScore`]< maxScore){
+        //     // window.alert(`${whose} przedobrzył, kończy grę`)
+        //     return this.state[`${whose}RoundScore`]
+        // } else {
+        //     this.dealCards(1,whose)
+        // }
     }
+
+
+    
 
     render(){
         
