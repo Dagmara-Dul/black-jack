@@ -1,4 +1,4 @@
-.chipClass{
+.chip{
     display:block;
     max-width:120px;
     text-align: center;
@@ -13,3 +13,20 @@
     cursor: pointer;
 }
 
+.actionBtnClass{
+    display:inline-block;
+    text-transform: uppercase;
+    height:100px;
+    width:100px;
+    border-radius: 50%;
+    border: 2px solid #000000;
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+.actionBtnClass:hover{
+    background-color:#000000;
+    color: #ffffff;
+    border-color: #000000;
+    font-weight: bold;
+}

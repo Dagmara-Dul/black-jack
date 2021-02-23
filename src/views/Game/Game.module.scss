@@ -1,0 +1,36 @@
+.cards{
+    width:100px;
+    height:200px;
+}
+
+.cardImage{
+    width: 100px;
+    height:auto;
+}
+
+.actionBtnPackage{
+    text-align: center;
+    display:none;
+}
+
+.croupierCardsPackage{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.cardBack {
+    @extend .cardImage;
+    height:138px;
+    border: .5px solid #7f7e7e;
+    border-radius:5px;
+}
+
+.h2{
+    text-align: center;
+}
+
+.startBtn{
+    display: flex;
+    justify-content: center;
+}
