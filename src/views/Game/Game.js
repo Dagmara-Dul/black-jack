@@ -6,6 +6,7 @@ import Button from "../../components/Button/Button";
 import Bankbet from "../../components/Bankbet/Bankbet";
 import Counter from "../../components/Counter/Counter";
 import cardBack from "../../media/cardBack.png";
+import Modal from '../../components/Modal/Modal'
 
 class Game extends React.Component {
   constructor(props) {
@@ -22,6 +23,9 @@ class Game extends React.Component {
       bank: 0,
       bet: 0,
       deal: 0,
+      isModalOpen:true,
+      message:''
+
     };
   }
 
@@ -194,6 +198,7 @@ class Game extends React.Component {
       this.compareTheResults(casinoScore,playerScore)
       if (dealCardsDuringSt >= 17) {
         console.log("koniec");
+        this.compareTheResults(casinoScore,playerScore)
       }else {
         console.log(this.dealCardsDuringStand(fn, nrOfCards, cardsOwner));
         console.log(dealCardsDuringSt)
@@ -223,26 +228,58 @@ class Game extends React.Component {
   };
 
   compareTheResults = (casinoScore,playerScore) =>{
+    // console.log("sprawdzam wyniki")
     if (playerScore === 21 && casinoScore===21){
-      console.log("remis")
-    } else if((playerScore > 21 && casinoScore>21)){
-      console.log("oboje przegrywaja")
+      // window.alert("remis")emis& casinoScore>21)){
+      // window.alert("oboje przegrywaja")
+      this.openModal() 
+       this.addText('oboje przegrywaja')
     }else if (playerScore===21 && casinoScore>21){
-      console.log("wygrywasz")
+      // window.alert("wygrywasz")
+      this.openModal() 
+       this.addText('wygrywasz')
     } else if(playerScore===21 && casinoScore<21 && casinoScore>17){
-      console.log("costam")
+      // window.alert("costam")
+      this.openModal() 
+      this.addText('ostam')
     } else if(casinoScore===21 && playerScore<21 && playerScore>17){
-      console.log("przegrałeś")
+      // window.alert("przegrałeś")
+      this.openModal() 
+       this.addText('przegrałeś')
     }else if (casinoScore===21 && playerScore>21){
-      console.lod("przegrywasz")
+      // window.alert("przegrywasz")
+      this.openModal() 
+       this.addText('przegrywasz')
     }else if (playerScore<casinoScore && casinoScore<21){
-      console.log("właśnie przegrałeś")
+      // window.alert("właśnie przegrałeś")
+      this.openModal() 
+       this.addText('właśnie przegrałeś')
     }
   }
 
+  openModal = () => {
+    this.setState ({
+      isModalOpen: true,
+    })
+  }
+
+  closeModal = () => {
+    this.setState ({
+      isModalOpen: false,
+    })
+  }
+
+  addText = (text)=>{
+    this.setState({
+      message:text
+    })
+  }
+
   render() {
+    const { isModalOpen } = this.state;
     return (
       <>
+      { isModalOpen && <Modal closeModalFn={this.closeModal} text={this.state.message}></Modal> }
         <Bankbet
           bankValue={this.state.bank}
           betValue={this.state.bet}
@@ -262,20 +299,21 @@ class Game extends React.Component {
         </div>
         <PlayerCards></PlayerCards>
         <Counter points={this.state.playerRoundScore}>player score:</Counter>
-
+        {/* { isModalOpen && <Modal closeModalFn={this.closeModal} text={this.state.message}></Modal> } */}
         <div className={styles.actionBtnPackage} id="actionBtnPackage">
-          <div id="doublePackage">
+          <div className={styles.actionBtn} id="doublePackage">
             <Chip id="double" onClick={()=> this.double()}>Double</Chip>
           </div>
-          <div id="hitPackage">
+          <div className={styles.actionBtn} id="hitPackage">
             <Chip>Hit</Chip>
           </div>
-          <div id="standPackage">
+          <div className={styles.actionBtn} id="standPackage">
             <Chip id="stand" onClick={() => this.stand()}>
               Stand
             </Chip>
           </div>
         </div>
+        
       </>
     );
   }
