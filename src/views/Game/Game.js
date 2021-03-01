@@ -23,7 +23,7 @@ class Game extends React.Component {
       bank: 0,
       bet: 0,
       deal: 0,
-      isModalOpen:true,
+      isModalOpen:false,
       message:''
 
     };
@@ -76,10 +76,6 @@ class Game extends React.Component {
 
   removeButton = (id) => {
     document.getElementById(id).style.display = "none";
-    // <div className={styles.countersPackage}>
-    //   <div className={styles.bankCounterPackage}>Bank: ${this.state.bank}</div>
-    //   <div className={styles.betCounterPackage}>Bet: ${this.state.bet}</div>
-    // </div>;
   };
 
   getBankAndBetValues = (counter) => {
@@ -127,7 +123,6 @@ class Game extends React.Component {
           }));
           return this.state[`${toWhom}RoundScore`];
         });
-      // .then(()=>this.checkScore(toWhom))
     } else {
       console.log("can't deal cards, there is no deck chosen");
     }
@@ -152,7 +147,7 @@ class Game extends React.Component {
       })
       .then(() => {
         const playerCards = "player";
-        this.checkScoreNow(playerCards);
+        this.checkScore(playerCards);
       })
       .then(() => {
         const casinoCards = "casino";
@@ -193,8 +188,8 @@ class Game extends React.Component {
     try {
       const dealCardsDuringSt = await fn(nrOfCards, cardsOwner);
       // console.log("here" + dealCardsDuringSt);
-      let casinoScore = this.checkScoreNow('casino');
-      let playerScore = this.checkScoreNow('player')
+      let casinoScore = this.checkScore('casino');
+      let playerScore = this.checkScore('player')
       this.compareTheResults(casinoScore,playerScore)
       if (dealCardsDuringSt >= 17) {
         console.log("koniec");
@@ -202,8 +197,6 @@ class Game extends React.Component {
       }else {
         console.log(this.dealCardsDuringStand(fn, nrOfCards, cardsOwner));
         console.log(dealCardsDuringSt)
-        
-        // this.dealCardsDuringStand(fn, nrOfCards, cardsOwner)
       }
     } catch (err) {
       console.log(Error(err));
@@ -211,49 +204,33 @@ class Game extends React.Component {
   };
 
   checkScore = (whose) => {
-    do {
-      this.dealCards(1, whose);
-    } while (this.state[`${whose}RoundScore`] < 17);
-    // if(this.state[`${whose}RoundScore`]< maxScore){
-    //     // window.alert(`${whose} przedobrzył, kończy grę`)
-    //     return this.state[`${whose}RoundScore`]
-    // } else {
-    //     this.dealCards(1,whose)
-    // }
-  };
-
-  checkScoreNow = (whose) => {
     let score = this.state[`${whose}RoundScore`];
     return score;
   };
 
   compareTheResults = (casinoScore,playerScore) =>{
-    // console.log("sprawdzam wyniki")
+    
+    const winMessage = "You've just won!"
+    const lossMessage = "You lost"
+    const drawMessage = "draw - try again" 
     if (playerScore === 21 && casinoScore===21){
-      // window.alert("remis")emis& casinoScore>21)){
-      // window.alert("oboje przegrywaja")
       this.openModal() 
-       this.addText('oboje przegrywaja')
+      this.addText(drawMessage)
     }else if (playerScore===21 && casinoScore>21){
-      // window.alert("wygrywasz")
       this.openModal() 
-       this.addText('wygrywasz')
+      this.addText(winMessage)
     } else if(playerScore===21 && casinoScore<21 && casinoScore>17){
-      // window.alert("costam")
       this.openModal() 
-      this.addText('ostam')
+      this.addText(winMessage)
     } else if(casinoScore===21 && playerScore<21 && playerScore>17){
-      // window.alert("przegrałeś")
       this.openModal() 
-       this.addText('przegrałeś')
+      this.addText(lossMessage)
     }else if (casinoScore===21 && playerScore>21){
-      // window.alert("przegrywasz")
       this.openModal() 
-       this.addText('przegrywasz')
+      this.addText(lossMessage)
     }else if (playerScore<casinoScore && casinoScore<21){
-      // window.alert("właśnie przegrałeś")
       this.openModal() 
-       this.addText('właśnie przegrałeś')
+      this.addText(lossMessage)
     }
   }
 
@@ -279,7 +256,7 @@ class Game extends React.Component {
     const { isModalOpen } = this.state;
     return (
       <>
-      { isModalOpen && <Modal closeModalFn={this.closeModal} text={this.state.message}></Modal> }
+      { isModalOpen && <Modal closeModalFn={this.closeModal} text={this.state.message} btnText="następna runda"></Modal> }
         <Bankbet
           bankValue={this.state.bank}
           betValue={this.state.bet}
